@@ -1,19 +1,33 @@
-from pymongo import MongoClient
 import streamlit as st
+from pymongo import MongoClient
+from dotenv import load_dotenv
 from urllib.parse import quote_plus
 from bson import ObjectId
+import os
 
 # Import the Cloudinary libraries
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
+# Load the .env file into the environment
+load_dotenv()
+
+# Access the environment variables
+CLOUDINARY_CLOUD_NAME = os.getenv("CLOUDINARY_CLOUD_NAME")
+CLOUDINARY_API_KEY = os.getenv("CLOUDINARY_API_KEY")
+CLOUDINARY_API_SECRET = os.getenv("CLOUDINARY_API_SECRET")
+DATABASE_USERNAME = os.getenv("DATABASE_USERNAME")
+DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD")
+DATABASE_CLUSTER_NAME = os.getenv("DATABASE_CLUSTER_NAME")
+DATABASE_NAME = os.getenv("DATABASE_NAME")
+
 
 # Global Configuration
 cloudinary.config(
-    cloud_name="ducuu1kax",
-    api_key="683817391784857",
-    api_secret="sRluVh7FuHO_-Vap8TIaLps92VM",
+    cloud_name=CLOUDINARY_CLOUD_NAME,
+    api_key=CLOUDINARY_API_KEY,
+    api_secret=CLOUDINARY_API_SECRET,
     secure=True,
 )
 
@@ -24,9 +38,9 @@ def init_db(server: str):
     client = None
     if server == "remote":
         uri = "mongodb+srv://%s:%s@%s" % (
-            quote_plus(st.secrets.db_username),
-            quote_plus(st.secrets.db_pswd),
-            st.secrets.cluster_name,
+            quote_plus(DATABASE_USERNAME),
+            quote_plus(DATABASE_PASSWORD),
+            DATABASE_CLUSTER_NAME,
         )
 
         # Create a new client and connect to the Remote server
@@ -42,7 +56,7 @@ def init_db(server: str):
     except Exception as e:
         print("Error connecting to the database", e)
 
-    db = client[st.secrets.db_name]
+    db = client[DATABASE_NAME]
 
 
     return db
