@@ -12,7 +12,9 @@ st.set_page_config(
 # Import Modules and Components
 import database.database as db
 from components.app_bar import app_bar
-
+from components.pc_registration_form import pc_registration_form
+from components.farmer_registration_form import farmer_registration_form
+from components.cooperatives_registration_form import cooperatives_registration_form
 
 # Load Initial Application Data from Database
 if "app_data" not in st.session_state:
@@ -40,3 +42,24 @@ if "app_data" not in st.session_state:
 app_bar(title='Data Entry')
 
 # Set up the tabs for the various forms 
+pcs_tab, farmers_tab, cooperatives_tab, agric_inputs_tab, cocoa_records_tab = st.tabs(
+        [
+            "PURCHASING CLERKS (PCs)",
+            "FARMERS",
+            "COOPERATIVE GROUPS",
+            "FARMER INPUTS",
+            "COCOA RECORDS",
+        ]
+    )
+
+# PCs Registration Form
+with pcs_tab:
+    pc_registration_form()
+
+# Farmers Registration Form
+with farmers_tab:
+    farmer_registration_form()
+
+# Cooperatives Registration Form
+with cooperatives_tab:
+    cooperatives_registration_form()
