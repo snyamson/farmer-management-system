@@ -63,7 +63,7 @@ def init_db(server: str):
 
 
 # Initialize Database and get db and fs instance
-db = init_db(server="local")
+db = init_db(server="remote")
 
 
 # Insert Record to the database
