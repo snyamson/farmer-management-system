@@ -2,6 +2,8 @@ import streamlit as st
 
 import database.database as db
 
+
+
 # Define the module
 def farmer_registration_form():
     # Perform Data Fetching
@@ -79,10 +81,11 @@ def farmer_registration_form():
                     farmer_id = db.insert_record(collection="farmers", payload=farmer)
 
                     # Update farmers_data in session state
-                    st.session_state["app_data"]["farmers_data"] = db.fetch_records(
+                    farmers_data = db.fetch_records(
                         collection="farmers"
                     )
+                    st.session_state["app_data"]["farmers_data"] = farmers_data
 
                     st.toast(f":green[Successfully added farmer - {farmer_id}]")
                 except Exception as e:
-                    st.toast(":red[Error adding farmer")
+                    st.toast(f":red[Error adding farmer] - {str(e)}")

@@ -2,6 +2,12 @@ import streamlit as st
 import database.database as db
 
 def pc_registration_form():
+
+    coop_group_name_id = st.session_state["app_data"]["coop_group_name_id"]
+
+    # Define the Name Options for SelectBoxes
+    coop_options = [coop["NAME"] for coop in coop_group_name_id]
+    
     with st.form(key="PC Data Entry", clear_on_submit=True):
         st.subheader("Purchasing Clerk Registration Form", divider="green")
 
@@ -52,12 +58,7 @@ def pc_registration_form():
                 pc_cooperative = st.selectbox(
                     label="Cooperative Group",
                     help="PC Cooperative Group",
-                    options=[
-                        "Group 1",
-                        "Group 2",
-                        "Group 3",
-                        "Group 4",
-                    ],
+                    options=coop_options,
                 )
 
         with st.container():
@@ -235,12 +236,14 @@ def pc_registration_form():
                     inserted_id = db.insert_record(collection="pcs", payload=pc)
 
                     # Refresh the pcs_name_id and pcs_data in the session state
-                    st.session_state["app_data"]['pcs_name_id'] = db.fetch_names_and_ids(
+                    pcs_name_id = db.fetch_names_and_ids(
                         collection="pcs"
                     )
-                    st.session_state["app_data"]['pcs_data'] = db.fetch_records(
+                    pcs_data = db.fetch_records(
                         collection="pcs"
                     )
+                    st.session_state["app_data"]['pcs_name_id'] = pcs_name_id
+                    st.session_state["app_data"]['pcs_data'] = pcs_data
 
                     st.toast(f":green[Successfully added PC - {inserted_id}]")
 

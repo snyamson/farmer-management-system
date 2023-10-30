@@ -68,12 +68,14 @@ def cooperatives_registration_form():
                     )
 
                     # Update coop_group_data and coop_group_name_id in session state
-                    st.session_state["app_data"]["coop_group_name_id"] = db.fetch_names_and_ids(
+                    coop_group_name_id = db.fetch_names_and_ids(
                         collection="cooperative_groups"
                     )
-                    st.session_state["app_data"]["coop_group_data"] = db.fetch_records(
+                    coop_group_data = db.fetch_records(
                         collection="cooperative_groups"
                     )
+                    st.session_state["app_data"]["coop_group_name_id"] = coop_group_name_id
+                    st.session_state["app_data"]["coop_group_data"] = coop_group_data
                     st.toast(f":green[Successfully added group - {group_id}]")
                 except Exception as e:
-                    st.toast(":red[Error adding group", str(e))
+                    st.toast(f":red[Error adding group - {str(e)}]")

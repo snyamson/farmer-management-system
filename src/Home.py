@@ -16,6 +16,7 @@ from components.pc_registration_form import pc_registration_form
 from components.farmer_registration_form import farmer_registration_form
 from components.cooperatives_registration_form import cooperatives_registration_form
 
+
 # Load Initial Application Data from Database
 if "app_data" not in st.session_state:
     # Cooperative Groups (Names and IDs Only)
@@ -40,6 +41,16 @@ if "app_data" not in st.session_state:
 
 # Home Page
 app_bar(title='Data Entry')
+
+# Minimize the padding 
+st.markdown(
+        """
+    <style>
+        .block-container { padding-top: 2rem; padding-bottom: 2rem;}   
+    </style>
+    """,
+        unsafe_allow_html=True,
+    )
 
 # Set up the tabs for the various forms 
 pcs_tab, farmers_tab, cooperatives_tab, agric_inputs_tab, cocoa_records_tab = st.tabs(
