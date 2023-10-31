@@ -24,7 +24,7 @@ if st.session_state['authentication_status'] is not True:
 else:
 
     # Data Explorer Page
-    app_bar(title='DATA EXPLORER')
+    app_bar(title='DATA EXPLORER', superuser=False)
 
     # Minimize the padding 
     st.markdown(

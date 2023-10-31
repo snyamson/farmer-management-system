@@ -24,7 +24,7 @@ if st.session_state['authentication_status'] is not True:
 else:
 
     # Data Export Page
-    app_bar(title='DATA EXPORT')
+    app_bar(title='DATA EXPORT', superuser=False)
 
     # Minimize the padding 
     st.markdown(

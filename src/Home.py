@@ -26,7 +26,7 @@ if st.session_state['authentication_status'] is not True:
     auth()
 else:
     # Home Page
-    app_bar(title='DATA ENTRY')
+    manage_users_button = app_bar(title='DATA ENTRY', superuser=True if st.session_state['name'] == 'Solomon Nyamson' else False)
 
     # Minimize the padding 
     st.markdown(
@@ -38,25 +38,29 @@ else:
             unsafe_allow_html=True,
         )
 
-    # Set up the tabs for the various forms 
-    pcs_tab, farmers_tab, cooperatives_tab, agric_inputs_tab, cocoa_records_tab = st.tabs(
-            [
-                "PURCHASING CLERKS (PCs)",
-                "FARMERS",
-                "COOPERATIVE GROUPS",
-                "FARMER INPUTS",
-                "COCOA RECORDS",
-            ]
-        )
+    if manage_users_button:
+        st.write('Manage Users on this tab')
 
-    # PCs Registration Form
-    with pcs_tab:
-        pc_registration_form()
+    else:
+        # Set up the tabs for the various forms 
+        pcs_tab, farmers_tab, cooperatives_tab, agric_inputs_tab, cocoa_records_tab = st.tabs(
+                [
+                    "PURCHASING CLERKS (PCs)",
+                    "FARMERS",
+                    "COOPERATIVE GROUPS",
+                    "FARMER INPUTS",
+                    "COCOA RECORDS",
+                ]
+            )
 
-    # Farmers Registration Form
-    with farmers_tab:
-        farmer_registration_form()
+        # PCs Registration Form
+        with pcs_tab:
+            pc_registration_form()
 
-    # Cooperatives Registration Form
-    with cooperatives_tab:
-        cooperatives_registration_form()
+        # Farmers Registration Form
+        with farmers_tab:
+            farmer_registration_form()
+
+        # Cooperatives Registration Form
+        with cooperatives_tab:
+            cooperatives_registration_form()
