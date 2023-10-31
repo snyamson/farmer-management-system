@@ -1,4 +1,5 @@
 import streamlit as st
+from datetime import date
 import database.database as db
 
 def pc_registration_form():
@@ -35,6 +36,7 @@ def pc_registration_form():
                 pc_dob = st.date_input(
                     label="Date of Birth",
                     help="Select Date of Birth",
+                    min_value= date(year=1940, month=1, day=1),      
                 )
                 pc_age = st.text_input(
                     label="Age",
@@ -79,6 +81,7 @@ def pc_registration_form():
                     key="g1_dob",
                     label="Date of Birth",
                     help="Select Date of Birth",
+                    min_value= date(year=1940, month=1, day=1),      
                 )
                 g1_mode_of_id = st.selectbox(
                     key="g1_moi",
@@ -116,6 +119,7 @@ def pc_registration_form():
                     key="g2_dob",
                     label="Date of Birth",
                     help="Select Date of Birth",
+                    min_value= date(year=1940, month=1, day=1),      
                 )
                 g2_mode_of_id = st.selectbox(
                     key="g2_moi",

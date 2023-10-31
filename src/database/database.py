@@ -61,9 +61,8 @@ def init_db(server: str):
 
     return db
 
-
-# Initialize Database and get db and fs instance
-db = init_db(server="remote")
+# Initialize Database and get db instance
+db = init_db(server="local")
 
 
 # Insert Record to the database
@@ -144,3 +143,35 @@ def upload_file(file, folder):
     except Exception as e:
         print(f"Error uploading -- {file}", e)
         return None
+
+# Load initial application data from the database
+def load_initial_app_data():
+    # Check if data is already loaded in session state
+    if "app_data" not in st.session_state:
+        # Load initial application data from the database
+        coop_group_name_id = fetch_names_and_ids(collection="cooperative_groups")
+        coop_group_data = fetch_records(collection="cooperative_groups")
+        pcs_name_id = fetch_names_and_ids(collection="pcs")
+        pcs_data = fetch_records(collection="pcs")
+        farmers_data = fetch_records(collection="farmers")
+
+        # Update session state with the new data
+        st.session_state["app_data"] = {
+            "coop_group_name_id": coop_group_name_id,
+            "coop_group_data": coop_group_data,
+            "pcs_name_id": pcs_name_id,
+            "pcs_data": pcs_data,
+            "farmers_data": farmers_data,
+        }
+
+    # Check for Authenticated Users
+    if "authentication_status" not in st.session_state:
+        st.session_state["authentication_status"] = None
+
+    if "logout" not in st.session_state:
+        st.session_state["logout"] = None
+
+    if "name" not in st.session_state:
+        st.session_state["name"] = None
+ 
+

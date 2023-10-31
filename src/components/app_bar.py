@@ -1,5 +1,7 @@
 import streamlit as st
 
+from components.authenticator import authenticator
+
 
 # Define the Module
 def app_bar(title:str):
@@ -18,6 +20,5 @@ def app_bar(title:str):
     with header_col_2:
         # Insert a line break to add spacing
         st.markdown("<br>", unsafe_allow_html=True)
-        st.button(label='Logout')
         # Create a button for logout
-        # authenticator.logout("Logout")
+        authenticator.logout("Logout")

@@ -20,7 +20,7 @@ def farmer_registration_form():
             column1, column2, column3 = st.columns(3)
 
             with column1:
-                farmer_name = st.text_input(label="Name of Farmer")
+                farmer_name = st.text_input(label="Name")
                 farmer_gender = st.selectbox(label="Gender", options=["M", "F"])
                 farmer_farm_size = st.text_input(
                     label="Farm Size", help="Enter the Size of the Farm"
@@ -28,7 +28,7 @@ def farmer_registration_form():
 
             with column2:
                 farmer_age = st.text_input(
-                    label="Age of Farmer",
+                    label="Age",
                     help="Enter the Age of the Farmer",
                 )
                 farmer_edu_level = st.selectbox(

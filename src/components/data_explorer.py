@@ -16,6 +16,28 @@ def data_explorer(record: str, collection:str, column_config: dict):
         # Create a DataFrame from the records
         records_df = pd.DataFrame(records)
 
+        # Display Metrics
+        if collection == 'pcs':
+            m_col1, m_col2, m_col3, m_col4 = st.columns(4)
+            m_col1.metric(label='PURCHASING CLERKS', value=len(records_df))
+            m_col2.metric(label='MALES', value=len(records_df[records_df['GENDER']=="Male"]))
+            m_col3.metric(label='FEMALES', value=len(records_df[records_df['GENDER']=="Female"]))
+            m_col4.metric(label='COOPERATIVE GROUPS', value=(records_df['COOPERATIVE GROUP'].nunique()))
+        elif collection == 'farmers':
+            f_col1, f_col2, f_col3, f_col4, f_col5 = st.columns(5)
+            f_col1.metric(label='FARMERS', value=len(records_df))
+            f_col2.metric(label='MALES', value=len(records_df[records_df['SEX (M/F)']=="M"]))
+            f_col3.metric(label='FEMALES', value=len(records_df[records_df['SEX (M/F)']=="F"]))
+            f_col4.metric(label='FARM SIZE', value=(pd.to_numeric(records_df['FARM SIZE'], errors='coerce').sum()))
+            f_col5.metric(label='COOPERATIVE GROUPS', value=(records_df['COOPERATIVE GROUP'].nunique()))
+        elif collection == 'cooperative_groups':
+            c_col1, c_col2, c_col3, c_col4, c_col5 = st.columns(5)
+            c_col1.metric(label='COOPERATIVE GROUPS', value=len(records_df))
+            c_col2.metric(label='REGIONS', value=(records_df['REGION'].nunique()))
+            c_col3.metric(label='DISTRICTS', value=(records_df['DISTRICT'][records_df['DISTRICT'] != ''].nunique()))
+            c_col4.metric(label='COMMUNITIES', value=(records_df['COMMUNITY'][records_df['COMMUNITY'] != ''].nunique()))
+            c_col5.metric(label='PURCHASING CLERKS', value=(records_df['PC'].nunique()))
+
         # Display the Ag-Grid
         edited_records_grid = st.data_editor(
             records_df,
