@@ -32,6 +32,16 @@ cloudinary.config(
 )
 
 
+# Database Instance Configuration
+# Determine if the code is running in production or locally
+if os.getenv("ENVIRONMENT") == "production":
+    # Code is running in production mode
+    database_server = "remote"
+else:
+    # Code is running locally
+    database_server = "local"
+
+
 # Define the connection to remote server or local database
 @st.cache_resource()
 def init_db(server: str):
@@ -62,7 +72,7 @@ def init_db(server: str):
     return db
 
 # Initialize Database and get db instance
-db = init_db(server="local")
+db = init_db(server=database_server)
 
 
 # Insert Record to the database
@@ -94,9 +104,11 @@ def update_record(collection: str, id: str, payload: dict):
     data_collection = db[collection]
     try:
         # Perform the record update
-        data_collection.update_one({"_id": ObjectId(id)}, {"$set": payload})
+        results = data_collection.update_one({"_id": ObjectId(id)}, {"$set": payload})
+        return results
     except Exception as e:
         print("Error updating record", e)
+        return None
 
 
 # Fetch all record names and ids in a collection
@@ -175,3 +187,13 @@ def load_initial_app_data():
         st.session_state["name"] = None
  
 
+# USER AUTHENTICATION MANAGEMENT
+
+# Create user
+def create_user(user:dict):
+    users = db['users']
+    try:
+        user_id = users.insert_one(user)
+        return user_id
+    except Exception as e:
+        print('Error Adding user', e)

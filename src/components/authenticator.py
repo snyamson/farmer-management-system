@@ -1,10 +1,20 @@
 import streamlit as st
 import streamlit_authenticator as stauth
 import yaml
+import os
 from yaml.loader import SafeLoader
 
+
+# Determine if the code is running in production or locally
+if os.getenv("ENVIRONMENT") == "production":
+    # Code is running in production mode
+    credentials_file_path = "/etc/secrets/credentials.yaml"
+else:
+    # Code is running locally
+    credentials_file_path = "./credentials.yaml"
+
 # Define the Instance of the Auth
-with open("./credentials.yaml") as file:
+with open(credentials_file_path) as file:
     config = yaml.load(file, Loader=SafeLoader)
 
 authenticator = stauth.Authenticate(

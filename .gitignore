@@ -47,3 +47,4 @@ venv.bak/
 
 # Credentials
 credentials.yaml
+src/database/auth.py

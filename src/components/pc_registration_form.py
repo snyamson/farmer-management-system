@@ -9,7 +9,7 @@ def pc_registration_form():
     # Define the Name Options for SelectBoxes
     coop_options = [coop["NAME"] for coop in coop_group_name_id]
     
-    with st.form(key="PC Data Entry", clear_on_submit=True):
+    with st.form(key=f"PC Data Entry", clear_on_submit=True):
         st.subheader("Purchasing Clerk Registration Form", divider="green")
 
         with st.container():
