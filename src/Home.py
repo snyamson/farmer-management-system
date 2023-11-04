@@ -31,7 +31,7 @@ else:
     # Home Page
     manage_users_button = app_bar(
         title="DATA ENTRY",
-        superuser=True if st.session_state["name"] == "Solomon Nyamson" else False,
+        superuser=True if st.session_state["username"] == "bapways_admin" else False,
     )
 
     # Minimize the padding

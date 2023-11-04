@@ -36,6 +36,12 @@ def auth():
                     footer.st-emotion-cache-164nlkn.ea3mdgi1 {
                         display: None;
                     }
+
+                    @media screen and (max-width: 767px) {
+                        div.st-emotion-cache-1v0mbdj.e115fcil1 {
+                        display: none;
+                        }
+                    }               
                     
             </style>
         """, unsafe_allow_html=True)
