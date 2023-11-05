@@ -18,7 +18,9 @@ from components.authenticator import auth
 from components.pc_registration_form import pc_registration_form
 from components.pc_update_form import pc_update_form
 from components.farmer_registration_form import farmer_registration_form
+from components.perform_farmer_update import perform_farmer_update
 from components.cooperatives_registration_form import cooperatives_registration_form
+from components.perform_cooperative_update import perform_cooperative_update
 
 
 # Load Initial Application Data from Database
@@ -82,6 +84,8 @@ else:
                         options=pcs_options,
                         format_func=lambda pc: pc["NAME"],
                         index=None,
+                        label_visibility='collapsed',
+                        placeholder="Select Purchasing Clerk"
                     )
                 with d_display:
                     # Create a dictionary for faster lookup
@@ -98,8 +102,27 @@ else:
 
         # Farmers Registration Form
         with farmers_tab:
-            farmer_registration_form()
+            farmer_add, farmer_update, farmer_delete = st.tabs(["ADD", "EDIT", "DELETE"])
+            with farmer_add:
+                farmer_registration_form()
+
+            with farmer_update:
+                perform_farmer_update()
 
         # Cooperatives Registration Form
         with cooperatives_tab:
-            cooperatives_registration_form()
+            coop_add, coop_update, coop_delete = st.tabs(["ADD", "EDIT", "DELETE"])
+            with coop_add:
+                cooperatives_registration_form()
+            
+            with coop_update:
+                perform_cooperative_update()
+
+        # Framer Inputs Registration Form
+        with agric_inputs_tab:
+            input_add, input_update, input_delete = st.tabs(["ADD", "EDIT", "DELETE"])
+
+        # Cocoa Stock Records Form
+        with cocoa_records_tab:
+            records_add, records_update, records_delete = st.tabs(["ADD", "EDIT", "DELETE"])
+

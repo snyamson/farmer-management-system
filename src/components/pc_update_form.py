@@ -288,7 +288,7 @@ def pc_update_form(pc_to_update: dict):
         }
 
         pc_update_button = st.form_submit_button(
-            label="Update PC", use_container_width=True, type="primary"
+            label="Update Purchasing Clerk", use_container_width=True, type="primary"
         )
 
         if pc_update_button:           
