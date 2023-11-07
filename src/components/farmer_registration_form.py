@@ -3,16 +3,20 @@ import streamlit as st
 import database.database as db
 
 
-
 # Define the module
 def farmer_registration_form():
     # Perform Data Fetching
-    pcs_name_id = st.session_state["app_data"]["pcs_name_id"]
-    coop_group_name_id = st.session_state["app_data"]["coop_group_name_id"]
+    pcs_data = st.session_state["app_data"]["pcs_data"]
+    coop_group_data = st.session_state["app_data"]["coop_group_data"]
 
-    # Define the Name Options for SelectBoxes
-    pcs_options = [pc["NAME"] for pc in pcs_name_id]
-    coop_options = [coop["NAME"] for coop in coop_group_name_id]
+    # Define Static Values
+    edu_levels = ["MSL", "JHS", "SSCE", "TERTIARY", "NFE"]
+    positions = [
+        "Chairperson",
+        "Vice Chairperson",
+        "Secretary",
+        "Member",
+    ]
 
     with st.container():
         with st.form(key="Farmer Data Entry", clear_on_submit=True):
@@ -34,30 +38,27 @@ def farmer_registration_form():
                 farmer_edu_level = st.selectbox(
                     label="Farmer Education Level",
                     help="Select Farmer Education Level",
-                    options=["MSL", "JHS", "SSCE", "TERTIARY", "NFE"],
+                    options=edu_levels,
                 )
                 farmer_cooperative = st.selectbox(
                     label="Cooperative Group",
                     help="Select Farmer Cooperative Group",
-                    options=coop_options,
+                    options=coop_group_data,
+                    format_func=lambda coop: coop["NAME"],
                 )
 
             with column3:
                 farmer_position = st.selectbox(
                     label="Position",
-                    options=[
-                        "Chairperson",
-                        "Vice Chairperson",
-                        "Secretary",
-                        "Member",
-                    ],
+                    options=positions,
                 )
                 farmer_phone_number = st.text_input(label="Contact Number")
 
                 farmer_pc = st.selectbox(
                     label="PC",
                     help="Select Farmer PC",
-                    options=pcs_options,
+                    options=pcs_data,
+                    format_func=lambda pc: pc["NAME"],
                 )
 
             farmer = {
@@ -66,10 +67,10 @@ def farmer_registration_form():
                 "EXECUTIVE POSITION": farmer_position,
                 "PHONE CONTACT": farmer_phone_number,
                 "AGE": farmer_age,
-                "COOPERATIVE GROUP": farmer_cooperative,
+                "COOPERATIVE GROUP": farmer_cooperative["NAME"],
                 "EDU LEVEL": farmer_edu_level,
                 "FARM SIZE": farmer_farm_size,
-                "PC": farmer_pc,
+                "PC": farmer_pc["NAME"],
             }
 
             # Define the submit button
@@ -81,9 +82,7 @@ def farmer_registration_form():
                     farmer_id = db.insert_record(collection="farmers", payload=farmer)
 
                     # Update farmers_data in session state
-                    farmers_data = db.fetch_records(
-                        collection="farmers"
-                    )
+                    farmers_data = db.fetch_records(collection="farmers")
                     st.session_state["app_data"]["farmers_data"] = farmers_data
 
                     st.toast(f":green[Successfully added farmer - {farmer_id}]")
