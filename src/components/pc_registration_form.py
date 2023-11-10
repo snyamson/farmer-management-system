@@ -2,13 +2,10 @@ import streamlit as st
 from datetime import date
 import database.database as db
 
+
 def pc_registration_form():
+    coop_group_data = st.session_state["app_data"]["coop_group_data"]
 
-    coop_group_name_id = st.session_state["app_data"]["coop_group_name_id"]
-
-    # Define the Name Options for SelectBoxes
-    coop_options = [coop["NAME"] for coop in coop_group_name_id]
-    
     with st.form(key=f"PC Data Entry", clear_on_submit=True):
         st.subheader("Purchasing Clerk Registration Form", divider="green")
 
@@ -21,11 +18,13 @@ def pc_registration_form():
                     label="Education Level",
                     help="Select Education Level",
                     options=["MSL", "JHS", "SSCE", "TERTIARY", "NFE"],
+                    index=None,
                 )
                 pc_mode_of_id = st.selectbox(
                     label="Mode of Identification",
                     help="Select Mode of Identification",
                     options=["Voters ID", "Passport", "NHIS", "Ghana Card"],
+                    index=None,
                 )
                 pc_date_registered = st.date_input(
                     label="Date of Registration",
@@ -36,7 +35,7 @@ def pc_registration_form():
                 pc_dob = st.date_input(
                     label="Date of Birth",
                     help="Select Date of Birth",
-                    min_value= date(year=1940, month=1, day=1),      
+                    min_value=date(year=1940, month=1, day=1),
                 )
                 pc_age = st.text_input(
                     label="Age",
@@ -47,20 +46,25 @@ def pc_registration_form():
                     help="Enter the ID Number of PC",
                 )
                 pc_community = st.text_input(
-                    label="Enter Community of Operation",
+                    label="Community of Operation",
                     help="Enter Community of Operation",
                 )
 
             with column3:
-                pc_contact = st.text_input(label="Enter Contact", help="Enter Contact")
-                pc_gender = st.selectbox(label="Gender", options=["Male", "Female"])
-                pc_location = st.text_input(
-                    label="Enter Location", help="Enter Location"
+                pc_contact = st.text_input(label="Contact", help="Enter Contact")
+
+                pc_gender = st.selectbox(
+                    label="Gender",
+                    options=["Male", "Female"],
+                    index=None,
                 )
+                pc_location = st.text_input(label="Location", help="Enter Location")
                 pc_cooperative = st.selectbox(
                     label="Cooperative Group",
                     help="PC Cooperative Group",
-                    options=coop_options,
+                    options=coop_group_data,
+                    format_func=lambda coop: coop["NAME"],
+                    index=None,
                 )
 
         with st.container():
@@ -74,6 +78,7 @@ def pc_registration_form():
                     label="Education Level",
                     help="Select Education Level",
                     options=["MSL", "JHS", "SSCE", "TERTIARY", "NFE"],
+                    index=None,
                 )
 
             with column5:
@@ -81,18 +86,22 @@ def pc_registration_form():
                     key="g1_dob",
                     label="Date of Birth",
                     help="Select Date of Birth",
-                    min_value= date(year=1940, month=1, day=1),      
+                    min_value=date(year=1940, month=1, day=1),
                 )
                 g1_mode_of_id = st.selectbox(
                     key="g1_moi",
                     label="Mode of Identification",
                     help="Select Mode of Identification",
                     options=["Voters ID", "Passport", "NHIS", "Ghana Card"],
+                    index=None,
                 )
 
             with column6:
                 g1_gender = st.selectbox(
-                    key="g1_gender", label="Gender", options=["Male", "Female"]
+                    index=None,
+                    key="g1_gender",
+                    label="Gender",
+                    options=["Male", "Female"],
                 )
 
                 g1_id_number = st.text_input(
@@ -112,6 +121,7 @@ def pc_registration_form():
                     label="Education Level",
                     help="Select Education Level",
                     options=["MSL", "JHS", "SSCE", "TERTIARY", "NFE"],
+                    index=None,
                 )
 
             with column8:
@@ -119,18 +129,22 @@ def pc_registration_form():
                     key="g2_dob",
                     label="Date of Birth",
                     help="Select Date of Birth",
-                    min_value= date(year=1940, month=1, day=1),      
+                    min_value=date(year=1940, month=1, day=1),
                 )
                 g2_mode_of_id = st.selectbox(
                     key="g2_moi",
                     label="Mode of Identification",
                     help="Select Mode of Identification",
                     options=["Voters ID", "Passport", "NHIS", "Ghana Card"],
+                    index=None,
                 )
 
             with column9:
                 g2_gender = st.selectbox(
-                    key="g2_gender", label="Gender", options=["Male", "Female"]
+                    key="g2_gender",
+                    label="Gender",
+                    options=["Male", "Female"],
+                    index=None,
                 )
 
                 g2_id_number = st.text_input(
@@ -145,21 +159,21 @@ def pc_registration_form():
 
             with column10:
                 pc_image = st.file_uploader(
-                    "Upload PC Passport Photo",
+                    "PC Passport Photo",
                     type=["jpg", "png", "jpeg"],
                     key="pc_image",
                 )
 
             with column11:
                 g1_image = st.file_uploader(
-                    "Upload G1 Passport Photo",
+                    "G1 Passport Photo",
                     type=["jpg", "png", "jpeg"],
                     key="g1_image",
                 )
 
             with column12:
                 g2_image = st.file_uploader(
-                    "Upload G2 Passport Photo",
+                    "G2 Passport Photo",
                     type=["jpg", "png", "jpeg"],
                     key="g2_image",
                 )
@@ -182,7 +196,9 @@ def pc_registration_form():
             "ID NUMBER": pc_id_number,
             "LOCATION": pc_location,
             "DATE REGISTERED": pc_date_registered.isoformat(),
-            "COOPERATIVE GROUP": pc_cooperative,
+            "COOPERATIVE GROUP": pc_cooperative["NAME"]
+            if pc_cooperative is not None
+            else None,
             "GUARANTOR 1 NAME": g1_name,
             "GUARANTOR 1 DATE OF BIRTH": g1_dob.isoformat(),
             "GUARANTOR 1 EDU LEVEL": g1_edu_level,
@@ -240,14 +256,10 @@ def pc_registration_form():
                     inserted_id = db.insert_record(collection="pcs", payload=pc)
 
                     # Refresh the pcs_name_id and pcs_data in the session state
-                    pcs_name_id = db.fetch_names_and_ids(
-                        collection="pcs"
-                    )
-                    pcs_data = db.fetch_records(
-                        collection="pcs"
-                    )
-                    st.session_state["app_data"]['pcs_name_id'] = pcs_name_id
-                    st.session_state["app_data"]['pcs_data'] = pcs_data
+                    pcs_name_id = db.fetch_names_and_ids(collection="pcs")
+                    pcs_data = db.fetch_records(collection="pcs")
+                    st.session_state["app_data"]["pcs_name_id"] = pcs_name_id
+                    st.session_state["app_data"]["pcs_data"] = pcs_data
 
                     st.toast(f":green[Successfully added PC - {inserted_id}]")
 

@@ -2,13 +2,22 @@ import streamlit as st
 
 import database.database as db
 
+
 # Define the module
 def cooperatives_registration_form():
     # Perform Data Fetching
-    pcs_name_id = st.session_state["app_data"]["pcs_name_id"]
+    pcs_data = st.session_state["app_data"]["pcs_data"]
 
-    # Define the Name Options for SelectBoxes
-    pcs_options = [pc["NAME"] for pc in pcs_name_id]
+    # Define Static Values
+    region = [
+        "Ashanti",
+        "Brong-Ahafo",
+        "Central",
+        "Eastern",
+        "Volta",
+        "Western North",
+        "Western South",
+    ]
 
     with st.container():
         with st.form(key="Cooperative Group Data Entry", clear_on_submit=True):
@@ -29,20 +38,15 @@ def cooperatives_registration_form():
                 group_region = st.selectbox(
                     label="Region",
                     help="Select Cooperative Group Region",
-                    options=[
-                        "Ashanti",
-                        "Brong-Ahafo",
-                        "Central",
-                        "Eastern",
-                        "Volta",
-                        "Western North",
-                        "Western South",
-                    ],
+                    options=region,
+                    index=None,
                 )
                 group_pc = st.selectbox(
                     label="Cooperative PC",
                     help="Select Cooperative Group PC",
-                    options=pcs_options,
+                    options=pcs_data,
+                    format_func=lambda pc: pc["NAME"],
+                    index=None,
                 )
                 group_date_registered = st.date_input(
                     label="Date Registered", help="Date of group registration"
@@ -54,7 +58,7 @@ def cooperatives_registration_form():
                     "COMMUNITY": group_community,
                     "REGION": group_region,
                     "DATE OF REGISTRATION": group_date_registered.isoformat(),
-                    "PC": group_pc,
+                    "PC": group_pc["NAME"] if group_pc is not None else None,
                 }
 
             cooperative_submit_button = st.form_submit_button(
@@ -66,15 +70,8 @@ def cooperatives_registration_form():
                     group_id = db.insert_record(
                         collection="cooperative_groups", payload=cooperative_group
                     )
-
-                    # Update coop_group_data and coop_group_name_id in session state
-                    coop_group_name_id = db.fetch_names_and_ids(
-                        collection="cooperative_groups"
-                    )
-                    coop_group_data = db.fetch_records(
-                        collection="cooperative_groups"
-                    )
-                    st.session_state["app_data"]["coop_group_name_id"] = coop_group_name_id
+                    # Update coop_group_data in session state
+                    coop_group_data = db.fetch_records(collection="cooperative_groups")
                     st.session_state["app_data"]["coop_group_data"] = coop_group_data
                     st.toast(f":green[Successfully added group - {group_id}]")
                 except Exception as e:

@@ -21,6 +21,8 @@ from components.farmer_registration_form import farmer_registration_form
 from components.perform_farmer_update import perform_farmer_update
 from components.cooperatives_registration_form import cooperatives_registration_form
 from components.perform_cooperative_update import perform_cooperative_update
+from components.render_delete import render_delete
+from components.perform_data_delete import perform_data_delete
 
 
 # Load Initial Application Data from Database
@@ -84,8 +86,8 @@ else:
                         options=pcs_options,
                         format_func=lambda pc: pc["NAME"],
                         index=None,
-                        label_visibility='collapsed',
-                        placeholder="Select Purchasing Clerk"
+                        label_visibility="collapsed",
+                        placeholder="Select Purchasing Clerk",
                     )
                 with d_display:
                     # Create a dictionary for faster lookup
@@ -98,25 +100,46 @@ else:
                         # Update PC here
                         pc_update_form(pc_to_update=selected_pc_data)
 
-                       
+            with pc_delete:
+                perform_data_delete(
+                    data="pcs_data",
+                    placeholder="Select Purchasing Clerk",
+                    collection="pcs",
+                )
 
         # Farmers Registration Form
         with farmers_tab:
-            farmer_add, farmer_update, farmer_delete = st.tabs(["ADD", "EDIT", "DELETE"])
+            farmer_add, farmer_update, farmer_delete = st.tabs(
+                ["ADD", "EDIT", "DELETE"]
+            )
             with farmer_add:
                 farmer_registration_form()
 
             with farmer_update:
                 perform_farmer_update()
 
+            with farmer_delete:
+                perform_data_delete(
+                    data="farmers_data",
+                    placeholder="Select Farmer",
+                    collection="farmers",
+                )
+
         # Cooperatives Registration Form
         with cooperatives_tab:
             coop_add, coop_update, coop_delete = st.tabs(["ADD", "EDIT", "DELETE"])
             with coop_add:
                 cooperatives_registration_form()
-            
+
             with coop_update:
                 perform_cooperative_update()
+
+            with coop_delete:
+                perform_data_delete(
+                    data="coop_group_data",
+                    placeholder="Select Cooperative Group",
+                    collection="cooperative_groups",
+                )
 
         # Framer Inputs Registration Form
         with agric_inputs_tab:
@@ -124,5 +147,6 @@ else:
 
         # Cocoa Stock Records Form
         with cocoa_records_tab:
-            records_add, records_update, records_delete = st.tabs(["ADD", "EDIT", "DELETE"])
-
+            records_add, records_update, records_delete = st.tabs(
+                ["ADD", "EDIT", "DELETE"]
+            )

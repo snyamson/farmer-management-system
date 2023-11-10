@@ -38,7 +38,7 @@ def pc_update_form(pc_to_update: dict):
                     options=edu_levels,
                     index=edu_levels.index(pc_to_update["EDUCATION LEVEL"])
                     if pc_to_update["EDUCATION LEVEL"] in edu_levels
-                    else 0,
+                    else None,
                 )
                 pc_mode_of_id = st.selectbox(
                     label="Mode of Identification",
@@ -46,7 +46,7 @@ def pc_update_form(pc_to_update: dict):
                     options=mode_of_id,
                     index=mode_of_id.index(pc_to_update["MODE OF IDENTIFICATION"])
                     if pc_to_update["MODE OF IDENTIFICATION"] in mode_of_id
-                    else 0,
+                    else None,
                 )
                 pc_date_registered = st.date_input(
                     label="Date of Registration",
@@ -90,7 +90,7 @@ def pc_update_form(pc_to_update: dict):
                     options=gender,
                     index=gender.index(pc_to_update["GENDER"])
                     if pc_to_update["GENDER"] in gender
-                    else 0,
+                    else None,
                 )
                 pc_location = st.text_input(
                     label="Enter Location",
@@ -121,7 +121,7 @@ def pc_update_form(pc_to_update: dict):
                     options=edu_levels,
                     index=edu_levels.index(pc_to_update["GUARANTOR 1 EDU LEVEL"])
                     if pc_to_update["GUARANTOR 1 EDU LEVEL"] in edu_levels
-                    else 0,
+                    else None,
                 )
 
             with column5:
@@ -143,7 +143,7 @@ def pc_update_form(pc_to_update: dict):
                         pc_to_update["GUARANTOR 1 MODE OF IDENTIFICATION"]
                     )
                     if pc_to_update["GUARANTOR 1 MODE OF IDENTIFICATION"] in mode_of_id
-                    else 0,
+                    else None,
                 )
 
             with column6:
@@ -153,7 +153,7 @@ def pc_update_form(pc_to_update: dict):
                     options=gender,
                     index=gender.index(pc_to_update["GUARANTOR 1 GENDER"])
                     if pc_to_update["GUARANTOR 1 GENDER"] in gender
-                    else 0,
+                    else None,
                 )
 
                 g1_id_number = st.text_input(
@@ -181,7 +181,7 @@ def pc_update_form(pc_to_update: dict):
                     options=edu_levels,
                     index=edu_levels.index(pc_to_update["GUARANTOR 2 EDU LEVEL"])
                     if pc_to_update["GUARANTOR 2 EDU LEVEL"] in edu_levels
-                    else 0,
+                    else None,
                 )
 
             with column8:
@@ -203,7 +203,7 @@ def pc_update_form(pc_to_update: dict):
                         pc_to_update["GUARANTOR 2 MODE OF IDENTIFICATION"]
                     )
                     if pc_to_update["GUARANTOR 2 MODE OF IDENTIFICATION"] in mode_of_id
-                    else 0,
+                    else None,
                 )
 
             with column9:
@@ -213,7 +213,7 @@ def pc_update_form(pc_to_update: dict):
                     options=gender,
                     index=gender.index(pc_to_update["GUARANTOR 2 GENDER"])
                     if pc_to_update["GUARANTOR 2 GENDER"] in gender
-                    else 0,
+                    else None,
                 )
 
                 g2_id_number = st.text_input(
@@ -291,53 +291,47 @@ def pc_update_form(pc_to_update: dict):
             label="Update Purchasing Clerk", use_container_width=True, type="primary"
         )
 
-        if pc_update_button:           
-                with st.spinner(text="Uploading......"):
-                    # Store the PC image in Cloudinary
-                    pc_image_url = pc_to_update["PC IMAGE"]
-                    if pc_image:
-                        pc_image_url = db.upload_file(file=pc_image, folder=pc_name)
+        if pc_update_button:
+            with st.spinner(text="Uploading......"):
+                # Store the PC image in Cloudinary
+                pc_image_url = pc_to_update["PC IMAGE"]
+                if pc_image:
+                    pc_image_url = db.upload_file(file=pc_image, folder=pc_name)
 
-                    # Store the Guarantor 1 image in Cloudinary
-                    g1_image_url = pc_to_update["G1 IMAGE"]
-                    if g1_image:
-                        g1_image_url = db.upload_file(g1_image, folder=pc_name)
+                # Store the Guarantor 1 image in Cloudinary
+                g1_image_url = pc_to_update["G1 IMAGE"]
+                if g1_image:
+                    g1_image_url = db.upload_file(g1_image, folder=pc_name)
 
-                    # Store the Guarantor 2 image in Cloudinary
-                    g2_image_url = pc_to_update["G2 IMAGE"]
-                    if g2_image:
-                        g2_image_url = db.upload_file(g2_image, folder=pc_name)
+                # Store the Guarantor 2 image in Cloudinary
+                g2_image_url = pc_to_update["G2 IMAGE"]
+                if g2_image:
+                    g2_image_url = db.upload_file(g2_image, folder=pc_name)
 
-                    # Store the PC signed agreement (PDF or DOCX) in Cloudinary
-                    pc_signed_agreement_url = pc_to_update["PC SIGNED AGREEMENT"]
-                    if pc_signed_agreement:
-                        pc_signed_agreement_url = db.upload_file(
-                            pc_signed_agreement, folder=pc_name
-                        )
+                # Store the PC signed agreement (PDF or DOCX) in Cloudinary
+                pc_signed_agreement_url = pc_to_update["PC SIGNED AGREEMENT"]
+                if pc_signed_agreement:
+                    pc_signed_agreement_url = db.upload_file(
+                        pc_signed_agreement, folder=pc_name
+                    )
 
-                    # Update the PC dictionary with URLS
-                    pc["PC IMAGE"] = pc_image_url
-                    pc["G1 IMAGE"] = g1_image_url
-                    pc["G2 IMAGE"] = g2_image_url
-                    pc["PC SIGNED AGREEMENT"] = pc_signed_agreement_url
-                
-                    # Update date in pcs collection
-                    results = db.update_record(collection="pcs", payload=pc, id=pc_to_update.get("_id"))
+                # Update the PC dictionary with URLS
+                pc["PC IMAGE"] = pc_image_url
+                pc["G1 IMAGE"] = g1_image_url
+                pc["G2 IMAGE"] = g2_image_url
+                pc["PC SIGNED AGREEMENT"] = pc_signed_agreement_url
 
-                    if results.acknowledged:
+                # Update date in pcs collection
+                results = db.update_record(
+                    collection="pcs", payload=pc, id=pc_to_update.get("_id")
+                )
 
-                        # Refresh the pcs_name_id and pcs_data in the session state
-                        pcs_name_id = db.fetch_names_and_ids(
-                                    collection="pcs"
-                                )
-                        pcs_data = db.fetch_records(
-                                    collection="pcs"
-                                )
-                        st.session_state["app_data"]['pcs_name_id'] = pcs_name_id
-                        st.session_state["app_data"]['pcs_data'] = pcs_data
+                if results.acknowledged:
+                    # Refresh the pcs_name_id and pcs_data in the session state
+                    pcs_data = db.fetch_records(collection="pcs")
+                    st.session_state["app_data"]["pcs_data"] = pcs_data
 
-                        st.toast(f":green[Successfully updated PC - {pc_to_update['_id']}]")
-                    
-                    else:
-                        st.toast(":red[Update was not successful]")
+                    st.toast(f":green[Successfully updated PC - {pc_to_update['_id']}]")
 
+                else:
+                    st.toast(":red[Update was not successful]")

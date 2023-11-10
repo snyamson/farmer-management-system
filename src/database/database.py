@@ -68,8 +68,8 @@ def init_db(server: str):
 
     db = client[DATABASE_NAME]
 
-
     return db
+
 
 # Initialize Database and get db instance
 db = init_db(server=database_server)
@@ -139,6 +139,21 @@ def fetch_record_by_id(collection: str, id: str):
         return None
 
 
+# Delete record in the database
+def delete_record(
+    collection: str,
+    id: str,
+):
+    data_collection = db[collection]
+    try:
+        # Perform the record update
+        results = data_collection.delete_one({"_id": ObjectId(id)})
+        return results
+    except Exception as e:
+        print("Error deleting record", e)
+        return None
+
+
 # Upload the image to Cloudinary and Return the secure url
 @st.cache_resource()
 def upload_file(file, folder):
@@ -155,6 +170,7 @@ def upload_file(file, folder):
     except Exception as e:
         print(f"Error uploading -- {file}", e)
         return None
+
 
 # Load initial application data from the database
 def load_initial_app_data():
@@ -185,15 +201,16 @@ def load_initial_app_data():
 
     if "name" not in st.session_state:
         st.session_state["name"] = None
- 
+
 
 # USER AUTHENTICATION MANAGEMENT
 
+
 # Create user
-def create_user(user:dict):
-    users = db['users']
+def create_user(user: dict):
+    users = db["users"]
     try:
         user_id = users.insert_one(user)
         return user_id
     except Exception as e:
-        print('Error Adding user', e)
+        print("Error Adding user", e)

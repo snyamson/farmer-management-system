@@ -36,7 +36,7 @@ def farmer_update_form(farmer_to_update: dict):
                     options=gender,
                     index=gender.index(farmer_to_update.get("SEX (M/F)"))
                     if farmer_to_update.get("SEX (M/F)") in gender
-                    else 0,
+                    else None,
                 )
                 farmer_farm_size = st.text_input(
                     label="Farm Size",
@@ -56,7 +56,7 @@ def farmer_update_form(farmer_to_update: dict):
                     options=edu_levels,
                     index=edu_levels.index(farmer_to_update.get("EDU LEVEL"))
                     if farmer_to_update.get("EDU LEVEL") in edu_levels
-                    else 0,
+                    else None,
                 )
                 farmer_cooperative = st.selectbox(
                     label="Cooperative Group",
@@ -69,7 +69,7 @@ def farmer_update_form(farmer_to_update: dict):
                             for index, coop in enumerate(coop_group_data)
                             if coop["NAME"] == farmer_to_update.get("COOPERATIVE GROUP")
                         ),
-                        0,
+                        None,
                     ),
                 )
 
@@ -79,7 +79,7 @@ def farmer_update_form(farmer_to_update: dict):
                     options=positions,
                     index=positions.index(farmer_to_update.get("EXECUTIVE POSITION"))
                     if farmer_to_update.get("EXECUTIVE POSITION") in positions
-                    else 0,
+                    else None,
                 )
                 farmer_phone_number = st.text_input(
                     label="Contact Number", value=farmer_to_update.get("PHONE CONTACT")
@@ -96,7 +96,7 @@ def farmer_update_form(farmer_to_update: dict):
                             for index, pc in enumerate(pcs_data)
                             if pc["NAME"] == farmer_to_update.get("PC")
                         ),
-                        0,
+                        None,
                     ),
                 )
 
@@ -106,10 +106,12 @@ def farmer_update_form(farmer_to_update: dict):
                 "EXECUTIVE POSITION": farmer_position,
                 "PHONE CONTACT": farmer_phone_number,
                 "AGE": farmer_age,
-                "COOPERATIVE GROUP": farmer_cooperative["NAME"],
+                "COOPERATIVE GROUP": farmer_cooperative["NAME"]
+                if farmer_cooperative is not None
+                else None,
                 "EDU LEVEL": farmer_edu_level,
                 "FARM SIZE": farmer_farm_size,
-                "PC": farmer_pc["NAME"],
+                "PC": farmer_pc["NAME"] if farmer_pc is not None else None,
             }
 
             # Define the submit button

@@ -25,7 +25,9 @@ def farmer_registration_form():
 
             with column1:
                 farmer_name = st.text_input(label="Name")
-                farmer_gender = st.selectbox(label="Gender", options=["M", "F"])
+                farmer_gender = st.selectbox(
+                    label="Gender", options=["M", "F"], index=None
+                )
                 farmer_farm_size = st.text_input(
                     label="Farm Size", help="Enter the Size of the Farm"
                 )
@@ -39,18 +41,19 @@ def farmer_registration_form():
                     label="Farmer Education Level",
                     help="Select Farmer Education Level",
                     options=edu_levels,
+                    index=None,
                 )
                 farmer_cooperative = st.selectbox(
                     label="Cooperative Group",
                     help="Select Farmer Cooperative Group",
                     options=coop_group_data,
                     format_func=lambda coop: coop["NAME"],
+                    index=None,
                 )
 
             with column3:
                 farmer_position = st.selectbox(
-                    label="Position",
-                    options=positions,
+                    label="Position", options=positions, index=None
                 )
                 farmer_phone_number = st.text_input(label="Contact Number")
 
@@ -59,6 +62,7 @@ def farmer_registration_form():
                     help="Select Farmer PC",
                     options=pcs_data,
                     format_func=lambda pc: pc["NAME"],
+                    index=None,
                 )
 
             farmer = {
@@ -67,10 +71,12 @@ def farmer_registration_form():
                 "EXECUTIVE POSITION": farmer_position,
                 "PHONE CONTACT": farmer_phone_number,
                 "AGE": farmer_age,
-                "COOPERATIVE GROUP": farmer_cooperative["NAME"],
+                "COOPERATIVE GROUP": farmer_cooperative["NAME"]
+                if farmer_cooperative is not None
+                else None,
                 "EDU LEVEL": farmer_edu_level,
                 "FARM SIZE": farmer_farm_size,
-                "PC": farmer_pc["NAME"],
+                "PC": farmer_pc["NAME"] if farmer_pc is not None else None,
             }
 
             # Define the submit button
