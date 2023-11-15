@@ -177,19 +177,17 @@ def load_initial_app_data():
     # Check if data is already loaded in session state
     if "app_data" not in st.session_state:
         # Load initial application data from the database
-        coop_group_name_id = fetch_names_and_ids(collection="cooperative_groups")
         coop_group_data = fetch_records(collection="cooperative_groups")
-        pcs_name_id = fetch_names_and_ids(collection="pcs")
         pcs_data = fetch_records(collection="pcs")
         farmers_data = fetch_records(collection="farmers")
+        input_requests = fetch_records(collection="input_requests")
 
         # Update session state with the new data
         st.session_state["app_data"] = {
-            "coop_group_name_id": coop_group_name_id,
             "coop_group_data": coop_group_data,
-            "pcs_name_id": pcs_name_id,
             "pcs_data": pcs_data,
             "farmers_data": farmers_data,
+            "input_requests": input_requests,
         }
 
     # Check for Authenticated Users

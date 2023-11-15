@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from streamlit_extras.metric_cards import style_metric_cards
 
 import database.database as db
 
@@ -8,6 +9,8 @@ import database.database as db
 def data_explorer(record: str, collection: str, column_config: dict):
     # Fetch data records
     records = st.session_state["app_data"][record]
+
+    style_metric_cards(box_shadow=False, border_left_color="#067528")
 
     if len(records) > 0:
         # Convert the records _id to string for comparison
