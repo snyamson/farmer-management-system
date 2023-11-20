@@ -18,17 +18,19 @@ with open(credentials_file_path) as file:
     config = yaml.load(file, Loader=SafeLoader)
 
 authenticator = stauth.Authenticate(
-    config['credentials'],
-    config['cookie']['name'],
-    config['cookie']['key'],
-    config['cookie']['expiry_days'],
-    config['preauthorized']
+    config["credentials"],
+    config["cookie"]["name"],
+    config["cookie"]["key"],
+    config["cookie"]["expiry_days"],
+    config["preauthorized"],
 )
+
 
 # Define the Main Auth Function
 def auth():
     if st.session_state["authentication_status"] is not True:
-        st.markdown("""
+        st.markdown(
+            """
             <style>
                     header.st-emotion-cache-18ni7ap.ezrtsby2,
                     button.st-emotion-cache-11ixbc7.ef3psqc4,
@@ -39,20 +41,22 @@ def auth():
 
                     @media screen and (max-width: 767px) {
                         div.st-emotion-cache-1v0mbdj.e115fcil1 {
-                        display: none;
-                        }
+                        margin-left: auto;
+                        margin-right: auto;
                     }               
                     
             </style>
-        """, unsafe_allow_html=True)
-        col1, col2  = st.columns(2)
+        """,
+            unsafe_allow_html=True,
+        )
+        col1, col2 = st.columns(2)
         with col1:
             st.markdown(
-            "<h1 style='text-align: center'>BAPWAYS MANAGEMENT SYSTEM </h1>",
-            unsafe_allow_html=True,
+                "<h1 style='text-align: center'>BAPWAYS MANAGEMENT SYSTEM </h1>",
+                unsafe_allow_html=True,
             )
             col4, col5, col6 = st.columns([1, 4, 1])
-            col5.image(image='images/logo.jpg', width=300)
+            col5.image(image="images/logo.jpg", width=300)
 
         with col2:
             st.markdown(f'{"<br>" * 2}', unsafe_allow_html=True)

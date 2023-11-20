@@ -1,11 +1,14 @@
 # Import Libraries
 import streamlit as st
-from datetime import date
-from datetime import datetime
+from streamlit_extras.switch_page_button import switch_page
+from streamlit_extras.metric_cards import style_metric_cards
+from streamlit_extras.stylable_container import stylable_container
+from streamlit_extras.row import row
+
 
 # Application Page Configuration
 st.set_page_config(
-    page_title="Data Entry | Bapways Farmer Management",
+    page_title="Home | Bapways Farmer Management",
     page_icon="./images/logo.jpg",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -15,15 +18,7 @@ st.set_page_config(
 import database.database as db
 from components.app_bar import app_bar
 from components.authenticator import auth
-from components.pc_registration_form import pc_registration_form
-from components.pc_update_form import pc_update_form
-from components.farmer_registration_form import farmer_registration_form
-from components.perform_farmer_update import perform_farmer_update
-from components.cooperatives_registration_form import cooperatives_registration_form
-from components.perform_cooperative_update import perform_cooperative_update
-from components.perform_data_delete import perform_data_delete
-from components.input_request_form import input_request_form
-from utils.logo import logo
+from styles.styles_main import container_style
 
 
 # Load Initial Application Data from Database
@@ -35,7 +30,7 @@ if st.session_state["authentication_status"] is not True:
 else:
     # Home Page
     manage_users_button = app_bar(
-        title="DATA ENTRY",
+        title="BAPWAYS MANAGEMENT SYSTEM",
         superuser=True if st.session_state["username"] == "bapways_admin" else False,
     )
 
@@ -49,105 +44,81 @@ else:
         unsafe_allow_html=True,
     )
 
-    # if manage_users_button:
-    #     b_col1, b_col2 = st.columns([1, 5])
-    #     b_col1.button(label="Back")
+    # Card styling
+    style_metric_cards(box_shadow=False, border_left_color="#067528")
 
-    # else:
-    #     pcs_data = st.session_state["app_data"]["pcs_data"]
-    #     # Set up the tabs for the various forms
-    #     (
-    #         pcs_tab,
-    #         farmers_tab,
-    #         cooperatives_tab,
-    #         agric_inputs_tab,
-    #         cocoa_records_tab,
-    #     ) = st.tabs(
-    #         [
-    #             "PURCHASING CLERKS (PCs)",
-    #             "FARMERS",
-    #             "COOPERATIVE GROUPS",
-    #             "FARMER INPUTS",
-    #             "COCOA RECORDS",
-    #         ]
-    #     )
+    # Company Information
+    with stylable_container(key="info_container", css_styles=container_style):
+        image, info = st.columns([2, 4])
 
-    #     # PCs Registration Form
-    #     with pcs_tab:
-    #         pc_add, pc_update, pc_delete = st.tabs(["ADD", "EDIT", "DELETE"])
-    #         with pc_add:
-    #             pc_registration_form()
-    #         with pc_update:
-    #             d_select, d_display = st.columns([2, 6])
-    #             with d_select:
-    #                 selected_pc = st.selectbox(
-    #                     label="Select PC to Update",
-    #                     options=pcs_data,
-    #                     format_func=lambda pc: pc["NAME"],
-    #                     index=None,
-    #                     label_visibility="collapsed",
-    #                     placeholder="Select Purchasing Clerk",
-    #                 )
-    #             with d_display:
-    #                 # Create a dictionary for faster lookup
-    #                 pcs_dict = {str(pc["_id"]): pc for pc in pcs_data}
-    #                 if selected_pc is not None:
-    #                     selected_pc_data = pcs_dict.get(selected_pc["_id"])
-    #                     # Add the id field
-    #                     selected_pc_data["_id"] = selected_pc["_id"]
+        # Center the Image on Mobile
+        st.markdown(
+            """
+            <style>
+                
+                @media screen and (max-width: 767px) {
+                        div.st-emotion-cache-1v0mbdj.e115fcil1 {
+                            margin-left: auto;
+                            margin-right: auto;
+                        }
+                    }  
+                    
+            </style>
 
-    #                     # Update PC here
-    #                     pc_update_form(pc_to_update=selected_pc_data)
+            """,
+            unsafe_allow_html=True,
+        )
 
-    #         with pc_delete:
-    #             perform_data_delete(
-    #                 data="pcs_data",
-    #                 placeholder="Select Purchasing Clerk",
-    #                 collection="pcs",
-    #             )
+        # Add Logo
+        with image:
+            st.image("./images/logo.jpg")
 
-    #     # Farmers Registration Form
-    #     with farmers_tab:
-    #         farmer_add, farmer_update, farmer_delete = st.tabs(
-    #             ["ADD", "EDIT", "DELETE"]
-    #         )
-    #         with farmer_add:
-    #             farmer_registration_form()
+        # Add Information
+        with info:
+            st.markdown(
+                "<p style='font-size: 1.4rem; text-align: justify; margin-top: auto; margin-bottom: auto; line-height: 2;'>BAPWAYS Agri Solutions GH Ltd. is a farmer-centered agribusiness that aims to address the challenges faced by smallholder cassava and cocoa farmers, particularly women, aged individuals, and incapacitated farmers in Ghana. Our mission is to improve the livelihoods of smallholder cassava farmers by providing comprehensive support, including quality inputs, labor, financial inclusion, and training on Best Agronomic Practices (BAP). </p>",
+                unsafe_allow_html=True,
+            )
 
-    #         with farmer_update:
-    #             perform_farmer_update()
+    # Main Statistics
 
-    #         with farmer_delete:
-    #             perform_data_delete(
-    #                 data="farmers_data",
-    #                 placeholder="Select Farmer",
-    #                 collection="farmers",
-    #             )
+    st.subheader("CURRENT STATISTICS")
+    tag1, tag2, tag3, tag4 = st.columns(4)
+    tag1.metric(
+        label="TOTAL FARMERS",
+        value=(len(st.session_state["app_data"]["farmers_data"])),
+    )
 
-    #     # Cooperatives Registration Form
-    #     with cooperatives_tab:
-    #         coop_add, coop_update, coop_delete = st.tabs(["ADD", "EDIT", "DELETE"])
-    #         with coop_add:
-    #             cooperatives_registration_form()
+    tag2.metric(
+        label="TOTAL COOPERATIVES",
+        value=(len(st.session_state["app_data"]["coop_group_data"])),
+    )
 
-    #         with coop_update:
-    #             perform_cooperative_update()
+    tag3.metric(
+        label="TOTAL PURCHASING CLERKS",
+        value=(len(st.session_state["app_data"]["pcs_data"])),
+    )
 
-    #         with coop_delete:
-    #             perform_data_delete(
-    #                 data="coop_group_data",
-    #                 placeholder="Select Cooperative Group",
-    #                 collection="cooperative_groups",
-    #             )
+    tag4.metric(
+        label="TOTAL INPUT REQUESTS",
+        value=len(st.session_state["app_data"]["input_requests"]),
+    )
 
-    #     # Framer Inputs Registration Form
-    #     with agric_inputs_tab:
-    #         input_add, input_update, input_delete = st.tabs(["ADD", "EDIT", "DELETE"])
-    #         with input_add:
-    #             input_request_form()
+    # Go To Buttons
+    with stylable_container(
+        key="buttons_container",
+        css_styles=container_style,
+    ):
+        st.subheader("GO TO")
+        button1, button2, button3 = st.columns([1, 1, 5])
+        with button1:
+            if st.button(
+                label="Perform Data Entry",
+            ):
+                switch_page("Data Entry")
 
-    #     # Cocoa Stock Records Form
-    #     with cocoa_records_tab:
-    #         records_add, records_update, records_delete = st.tabs(
-    #             ["ADD", "EDIT", "DELETE"]
-    #         )
+        with button2:
+            if st.button(
+                label="Explore Data",
+            ):
+                switch_page("Explore")

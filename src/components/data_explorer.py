@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 from streamlit_extras.metric_cards import style_metric_cards
+from streamlit_extras.dataframe_explorer import dataframe_explorer
+
 
 import database.database as db
 
@@ -68,12 +70,22 @@ def data_explorer(record: str, collection: str, column_config: dict):
             c_col5.metric(label="PURCHASING CLERKS", value=(records_df["PC"].nunique()))
 
         # Display the Data
-        st.dataframe(
-            records_df,
-            use_container_width=True,
-            hide_index=True,
-            column_config=column_config,
-        )
+
+        if record == "input_requests":
+            st.dataframe(
+                records_df,
+                use_container_width=True,
+                hide_index=True,
+                column_config=column_config,
+            )
+        else:
+            filtered_df = dataframe_explorer(df=records_df)
+            st.dataframe(
+                filtered_df,
+                use_container_width=True,
+                hide_index=True,
+                column_config=column_config,
+            )
     else:
         st.markdown(
             "<h3 style='color: #dddddd; text-align: center; margin-top:3rem'>No Records to Display! Please add record at the entry side</h3>",
