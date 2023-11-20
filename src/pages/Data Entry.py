@@ -24,7 +24,7 @@ from components.cooperatives_registration_form import cooperatives_registration_
 from components.perform_cooperative_update import perform_cooperative_update
 from components.perform_data_delete import perform_data_delete
 from components.input_request_form import input_request_form
-from utils.logo import logo
+from components.depot_stock_control_form import depot_stock_control_form
 
 
 # Load Initial Application Data from Database
@@ -69,7 +69,7 @@ else:
                 "FARMERS",
                 "COOPERATIVE GROUPS",
                 "FARMER INPUTS",
-                "COCOA RECORDS",
+                "DEPOT STOCK CONTROL",
             ]
         )
 
@@ -152,3 +152,6 @@ else:
             records_add, records_update, records_delete = st.tabs(
                 ["ADD", "EDIT", "DELETE"]
             )
+
+            with records_add:
+                depot_stock_control_form()
