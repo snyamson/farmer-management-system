@@ -76,7 +76,7 @@ else:
         # Add Information
         with info:
             st.markdown(
-                "<p style='font-size: 1.4rem; text-align: justify; margin-top: auto; margin-bottom: auto; line-height: 2;'>BAPWAYS Agri Solutions GH Ltd. is a farmer-centered agribusiness that aims to address the challenges faced by smallholder cassava and cocoa farmers, particularly women, aged individuals, and incapacitated farmers in Ghana. Our mission is to improve the livelihoods of smallholder cassava farmers by providing comprehensive support, including quality inputs, labor, financial inclusion, and training on Best Agronomic Practices (BAP). </p>",
+                "<p style='font-size: 1rem; text-align: justify; margin-top: auto; margin-bottom: auto; line-height: 2;'>BAPWAYS Agri Solutions GH Ltd. is a farmer-centered agribusiness that aims to address the challenges faced by smallholder cassava and cocoa farmers, particularly women farmers in Ghana. Our mission is to improve the livelihoods of smallholder cassava farmers by providing comprehensive support, including quality inputs, labor, financial inclusion, and training on Best Agronomic Practices (BAP). </p>",
                 unsafe_allow_html=True,
             )
 

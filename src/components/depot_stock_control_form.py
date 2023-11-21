@@ -1,14 +1,22 @@
 import streamlit as st
+from time import sleep
 
 import database.database as db
 
 
 # Define Module
 def depot_stock_control_form():
+    # Internal State
+    if "loading" not in st.session_state:
+        st.session_state.loading = False
+
     # Perform Data Fetching
     pcs_data = st.session_state["app_data"]["pcs_data"]
 
     with st.form(key="Depot Stock Control Entry Form", clear_on_submit=True):
+        # Form Title
+        st.subheader("Depot Stock Control Form", divider="green")
+
         col1, col2, col3 = st.columns(3)
 
         with col1:
@@ -54,3 +62,37 @@ def depot_stock_control_form():
         balance = st.number_input(label="Balance", min_value=0, key="balance")
 
         submit_button = st.form_submit_button(label="Submit", use_container_width=True)
+
+    # Stock Data
+    stock = {
+        "DATE": entry_date.isoformat(),
+        "WAYBILL NUMBER": waybill_number,
+        "SOCIETY": society,
+        "PC": pc.get("NAME") if pc is not None else None,
+        "PRI-EVAC: BAG": pri_bag,
+        "PRI-EVAC: CUMULATIVE": pri_cumulative,
+        "SEC-EVAC: BAG": sec_bag,
+        "SEC-EVAC: CUMULATIVE": sec_cumulative,
+        "BALANCE": balance,
+    }
+    # Declare the Empty loader
+    loading = st.empty()
+
+    if submit_button:
+        loading = st.info("Submitting")
+        try:
+            inserted_stock_id = db.insert_record(
+                collection="depot_stock_control", payload=stock
+            )
+
+            st.session_state["app_data"]["depot_stock_control"] = db.fetch_records(
+                collection="depot_stock_control"
+            )
+
+            if inserted_stock_id:
+                loading.empty()
+                st.toast(f":green[Successfully added stock id - {inserted_stock_id}]")
+
+        except Exception as e:
+            loading.empty()
+            st.toast(f":red[Failed adding stock - {str(e)}]")

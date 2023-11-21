@@ -69,6 +69,27 @@ def data_explorer(record: str, collection: str, column_config: dict):
             )
             c_col5.metric(label="PURCHASING CLERKS", value=(records_df["PC"].nunique()))
 
+        elif collection == "depot_stock_control":
+            d_col1, d_col2, d_col3, d_col4, d_col5, d_col6 = st.columns(6)
+            d_col1.metric(label="PURCHASING CLERKS", value=(records_df["PC"].nunique()))
+            d_col2.metric(
+                label="PRI EVACUATION (BAG)",
+                value=(records_df["PRI-EVAC: BAG"].sum()),
+            )
+            d_col3.metric(
+                label="PRI EVACUATION (CUM)",
+                value=(records_df["PRI-EVAC: CUMULATIVE"].sum()),
+            )
+            d_col4.metric(
+                label="SEC EVACUATION (BAG)",
+                value=(records_df["SEC-EVAC: BAG"].sum()),
+            )
+            d_col5.metric(
+                label="SEC EVACUATION (CUM)",
+                value=(records_df["SEC-EVAC: CUMULATIVE"].sum()),
+            )
+            d_col6.metric(label="BALANCE", value=(records_df["BALANCE"].sum()))
+
         # Display the Data
 
         if record == "input_requests":

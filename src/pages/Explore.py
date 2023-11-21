@@ -36,8 +36,20 @@ else:
     )
 
     # Define the Tabs
-    pcs_tab, farmers_tab, cooperatives_tab, input_requests = st.tabs(
-        ["PURCHASING CLERKS (PCs)", "FARMERS", "COOPERATIVE GROUPS", "INPUT REQUESTS"]
+    (
+        pcs_tab,
+        farmers_tab,
+        cooperatives_tab,
+        input_requests,
+        depot_stock_control,
+    ) = st.tabs(
+        [
+            "PURCHASING CLERKS (PCs)",
+            "FARMERS",
+            "COOPERATIVE GROUPS",
+            "INPUT REQUESTS",
+            "DEPOT STOCK CONTROL",
+        ]
     )
 
     # PCs Data Explorer
@@ -79,4 +91,12 @@ else:
                 "AMOUNT PAID": st.column_config.NumberColumn(format="GHS %d"),
                 "BALANCE": st.column_config.NumberColumn(format="GHS %d"),
             },
+        )
+
+    # Depot Stock Control Data Explorer
+    with depot_stock_control:
+        data_explorer(
+            record="depot_stock_control",
+            collection="depot_stock_control",
+            column_config={"_id": None},
         )

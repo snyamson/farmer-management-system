@@ -181,6 +181,7 @@ def load_initial_app_data():
         pcs_data = fetch_records(collection="pcs")
         farmers_data = fetch_records(collection="farmers")
         input_requests = fetch_records(collection="input_requests")
+        depot_stock_control = fetch_records(collection="depot_stock_control")
 
         # Update session state with the new data
         st.session_state["app_data"] = {
@@ -188,6 +189,7 @@ def load_initial_app_data():
             "pcs_data": pcs_data,
             "farmers_data": farmers_data,
             "input_requests": input_requests,
+            "depot_stock_control": depot_stock_control,
         }
 
     # Check for Authenticated Users
