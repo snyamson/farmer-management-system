@@ -19,10 +19,10 @@ def render_delete(selected_data, data: str, collection: str = None):
             with col1:
                 st.markdown(
                     f"""
-                    <h3> RECORD NAME:
+                    <h3> {'STOCK WAYBILL NUMBER' if data == 'depot_stock_control' else 'RECORD NAME'}:
                     {selected_data.get("NAME")
                     if selected_data.get("NAME") is not None
-                    else selected_data.get("NAME OF FARMER")}
+                    else (selected_data.get('WAYBILL NUMBER') if selected_data.get('WAYBILL NUMBER') is not None else selected_data.get("NAME OF FARMER"))}
                     </h3>
                     """,
                     unsafe_allow_html=True,
@@ -47,7 +47,7 @@ def render_delete(selected_data, data: str, collection: str = None):
                             st.session_state["app_data"][data] = records
 
                             st.toast(
-                                f":green[Successfully Deleted - {selected_data.get('NAME') if selected_data.get('NAME') is not None else selected_data.get('NAME OF FARMER')}]"
+                                f":green[Successfully Deleted - {selected_data.get('NAME') if selected_data.get('NAME') is not None else (selected_data.get('WAYBILL NUMBER') if selected_data.get('WAYBILL NUMBER') is not None else selected_data.get('NAME OF FARMER'))}]"
                             )
 
                         else:

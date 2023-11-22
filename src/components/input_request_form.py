@@ -126,6 +126,9 @@ def input_request_form():
                 )
 
                 if input_request_id is not None:
+                    st.session_state["app_data"]["input_requests"] = db.fetch_records(
+                        collection="input_requests"
+                    )
                     status.update(
                         label="Request Submitted Successfully",
                         state="complete",

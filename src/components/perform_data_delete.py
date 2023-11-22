@@ -9,12 +9,18 @@ def perform_data_delete(data: str, collection: str, placeholder: str = None):
     d_select, d_display = st.columns([2, 6])
     with d_select:
         selected_record = st.selectbox(
-            label="Select Farmer to Update",
+            label="Select to Update",
             key=data,
             options=records,
-            format_func=lambda record: record["NAME OF FARMER"]
-            if data == "farmers_data"
-            else record["NAME"],
+            format_func=lambda record: (
+                record["NAME OF FARMER"]
+                if data == "farmers_data"
+                else (
+                    record["WAYBILL NUMBER"]
+                    if data == "depot_stock_control"
+                    else record["NAME"]
+                )
+            ),
             index=None,
             label_visibility="collapsed",
             placeholder=placeholder if placeholder is not None else "Select Record",

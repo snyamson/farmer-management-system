@@ -148,6 +148,13 @@ else:
             with input_add:
                 input_request_form()
 
+            with input_delete:
+                perform_data_delete(
+                    data="input_requests",
+                    placeholder="Select Input Request",
+                    collection="input_requests",
+                )
+
         # Cocoa Stock Records Form
         with cocoa_records_tab:
             records_add, records_update, records_delete = st.tabs(
@@ -159,3 +166,10 @@ else:
 
             with records_update:
                 perform_depot_stock_entry_update()
+
+            with records_delete:
+                perform_data_delete(
+                    data="depot_stock_control",
+                    placeholder="Select Stock WayBill Number",
+                    collection="depot_stock_control",
+                )

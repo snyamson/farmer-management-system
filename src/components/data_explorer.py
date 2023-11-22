@@ -90,8 +90,31 @@ def data_explorer(record: str, collection: str, column_config: dict):
             )
             d_col6.metric(label="BALANCE", value=(records_df["BALANCE"].sum()))
 
-        # Display the Data
+        elif collection == "input_requests":
+            i_col1, i_col2, i_col3, i_col4, i_col5, i_col6 = st.columns(6)
+            i_col1.metric(label="NUMBER OF FARMERS", value=(len(records_df)))
+            i_col2.metric(
+                label="COOPERATIVE GROUPS",
+                value=(records_df["COOPERATIVE GROUP"].nunique()),
+            )
+            i_col3.metric(
+                label="TOTAL INPUTS SUPPLIED",
+                value=(records_df["QUANTITY"].sum()),
+            )
+            i_col4.metric(
+                label="TOTAL COST",
+                value=(records_df["TOTAL COST"].sum()),
+            )
+            i_col5.metric(
+                label="TOTAL AMOUNT PAID",
+                value=(records_df["AMOUNT PAID"].sum()),
+            )
+            i_col6.metric(
+                label="BALANCE REMAINING",
+                value=(records_df["BALANCE"].sum()),
+            )
 
+        # Display the Data
         if record == "input_requests":
             st.dataframe(
                 records_df,
@@ -101,6 +124,9 @@ def data_explorer(record: str, collection: str, column_config: dict):
             )
         else:
             filtered_df = dataframe_explorer(df=records_df)
+            for col in filtered_df.columns:
+                if "DATE" in col.upper():
+                    filtered_df[col] = pd.to_datetime(filtered_df[col]).dt.date
             st.dataframe(
                 filtered_df,
                 use_container_width=True,
