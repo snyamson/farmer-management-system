@@ -25,6 +25,7 @@ from components.perform_cooperative_update import perform_cooperative_update
 from components.perform_data_delete import perform_data_delete
 from components.input_request_form import input_request_form
 from components.depot_stock_control_form import depot_stock_control_form
+from components.perform_depot_stock_entry_update import perform_depot_stock_entry_update
 
 
 # Load Initial Application Data from Database
@@ -155,3 +156,6 @@ else:
 
             with records_add:
                 depot_stock_control_form()
+
+            with records_update:
+                perform_depot_stock_entry_update()

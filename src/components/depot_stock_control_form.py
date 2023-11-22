@@ -6,10 +6,6 @@ import database.database as db
 
 # Define Module
 def depot_stock_control_form():
-    # Internal State
-    if "loading" not in st.session_state:
-        st.session_state.loading = False
-
     # Perform Data Fetching
     pcs_data = st.session_state["app_data"]["pcs_data"]
 
