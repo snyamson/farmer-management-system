@@ -24,6 +24,7 @@ from components.cooperatives_registration_form import cooperatives_registration_
 from components.perform_cooperative_update import perform_cooperative_update
 from components.perform_data_delete import perform_data_delete
 from components.input_request_form import input_request_form
+from components.perform_input_requests_update import perform_input_requests_update
 from components.depot_stock_control_form import depot_stock_control_form
 from components.perform_depot_stock_entry_update import perform_depot_stock_entry_update
 
@@ -147,6 +148,9 @@ else:
             input_add, input_update, input_delete = st.tabs(["ADD", "EDIT", "DELETE"])
             with input_add:
                 input_request_form()
+
+            with input_update:
+                perform_input_requests_update()
 
             with input_delete:
                 perform_data_delete(
